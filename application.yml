@@ -5,17 +5,6 @@ spring:
         binder:
           brokers: localhost:9092
 
-eureka:
-  instance:
-    leaseRenewalIntervalInSeconds: 10
-    health-check-url-path: /actuator/health
-    metadata-map:
-      startup: ${random.int}    #needed to trigger info and endpoint update after restart
-  client:
-    registryFetchIntervalSeconds: 5
-    serviceUrl:
-      defaultZone: ${EUREKA_SERVICE_URL:http://localhost:8761}/eureka/
-
 management:
   endpoints:
     web:
@@ -24,3 +13,17 @@ management:
   endpoint:
     health:
       show-details: ALWAYS
+
+---
+
+spring:
+  profiles: kubernetes
+
+eureka:
+  client:
+    fetchRegistry: true
+    registerWithEureka: true
+    serviceUrl:
+      defaultZone: http://${DISCOVERY_SERVICE}:8761/eureka/
+  instance:
+    prefer-ip-address: true
