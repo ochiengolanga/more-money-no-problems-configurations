@@ -1,0 +1,37 @@
+spring:
+  jpa:
+    database: postgresql
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+      naming:
+        strategy: org.hibernate.cfg.ImprovedNamingStrategy
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+  datasource:
+    platform: postgres
+    url: jdbc:postgresql://172.17.0.3:5432/momoney-members
+    username: postgres
+    password: postgres
+
+---
+
+spring:
+  profiles: kubernetes
+  cloud:
+    stream:
+      kafka:
+        binder:
+          brokers: ${KAFKA_BROKERS}
+          zkNodes: ${KAFKA_ZOOKEEPER_NODES}
+  datasource:
+    url: jdbc:postgresql://${POSTGRES_DATABASE_HOST}:${POSTGRES_DATABASE_PORT:5432}/momoney-members
+    username: ${POSTGRES_DATABASE_USERNAME}
+    password: ${POSTGRES_DATABASE_PASSWORD}
+  jpa:
+    database: postgresql
+    show-sql: false
+    hibernate:
+      ddl-auto: update
+      naming:
+        strategy: org.hibernate.cfg.ImprovedNamingStrategy
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
